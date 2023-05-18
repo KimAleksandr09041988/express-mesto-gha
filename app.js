@@ -13,11 +13,8 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   family: 4,
 });
 
-app.use((req, _, next) => {
-  req.user = {
-    _id: '64663a621794175263a9f88e',
-  };
-
+app.use((req, res, next) => {
+  req.user = { _id: '64663a621794175263a9f88e' };
   next();
 });
 
@@ -25,6 +22,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(userRouter);
 app.use(cardRouter);
+
+app.use((req, res) => {
+  res.status(404).send({
+    message: 'Запрошен несуществующий роут',
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
