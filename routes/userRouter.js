@@ -3,9 +3,9 @@ const {
   getUsers, createUser, getUserById, editProfile, updateAvatar,
 } = require('../controllers/users');
 
-userRouter.get('/users', getUsers);
+userRouter.get(getUsers);
 
-userRouter.post('/users', createUser);
+userRouter.post(createUser);
 
 userRouter.get('/users/:id', getUserById);
 

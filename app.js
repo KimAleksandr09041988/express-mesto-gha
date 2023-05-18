@@ -1,6 +1,5 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -18,10 +17,10 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(userRouter);
-app.use(cardRouter);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use('/users', userRouter);
+app.use('/cards', cardRouter);
 
 app.use((req, res) => {
   res.status(404).send({

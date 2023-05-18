@@ -14,14 +14,13 @@
     "url": "git+https://github.com/KimAleksandr09041988/express-mesto-gha.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Kim Aleksandr",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/KimAleksandr09041988/express-mesto-gha/issues"
   },
   "homepage": "https://github.com/KimAleksandr09041988/express-mesto-gha#readme",
   "dependencies": {
-    "body-parser": "^1.20.2",
     "express": "^4.18.2",
     "mongoose": "^7.1.1"
   },
