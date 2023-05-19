@@ -1,10 +1,14 @@
 const Card = require('../models/card');
+const {
+  NOT_FOUND,
+  INTERNAL_SERVER_ERROR,
+} = require('../utils/constanst');
 
 const checkCardId = (card, res) => {
   if (card) {
     return res.send(card);
   }
-  return res.status(404).send({ message: 'Карточки с таким id не существует' });
+  return res.status(NOT_FOUND).send({ message: 'Карточки с таким id не существует' });
 };
 
 const getCards = (req, res) => {
@@ -14,7 +18,7 @@ const getCards = (req, res) => {
     })
     .catch(() => {
       res
-        .status(500)
+        .status(INTERNAL_SERVER_ERROR)
         .send({ message: 'Что-то пошло не так на сервере' });
     });
 };
@@ -29,13 +33,13 @@ const createCard = (req, res) => {
     })
     .catch((error) => {
       if (error.name === 'ValidationError') {
-        return res.status(400).send({
+        return res.status(NOT_FOUND).send({
           message: 'Данные переданы некорретно.',
 
         });
       }
       return res
-        .status(500)
+        .status(INTERNAL_SERVER_ERROR)
         .send({ message: 'Что-то пошло не так на сервере' });
     });
 };
@@ -47,17 +51,17 @@ const deleteCard = (req, res) => {
     .then((card) => {
       if (card.deletedCount === 0) {
         return res
-          .status(404)
+          .status(NOT_FOUND)
           .send({ message: 'Карточки с таким id не существует' });
       }
       return res.send({ message: 'Карточка удалена' });
     })
     .catch((error) => {
       if (error.name === 'CastError') {
-        return res.status(400).send({ message: 'Такого id не существует' });
+        return res.status(NOT_FOUND).send({ message: 'Такого id не существует' });
       }
       return res
-        .status(500)
+        .status(INTERNAL_SERVER_ERROR)
         .send({ message: 'Что-то пошло не так на сервере' });
     });
 };
@@ -74,10 +78,10 @@ const putDislike = (req, res) => {
     .then((card) => checkCardId(card, res))
     .catch((error) => {
       if (error.name === 'CastError') {
-        return res.status(400).send({ message: 'Некорректный _id' });
+        return res.status(NOT_FOUND).send({ message: 'Некорректный _id' });
       }
       return res
-        .status(500)
+        .status(INTERNAL_SERVER_ERROR)
         .send({ message: 'Что-то пошло не так на сервере' });
     });
 };
@@ -94,10 +98,10 @@ const putLike = (req, res) => {
     .then((card) => checkCardId(card, res))
     .catch((error) => {
       if (error.name === 'CastError') {
-        return res.status(400).send({ message: 'Такого id не существует' });
+        return res.status(NOT_FOUND).send({ message: 'Такого id не существует' });
       }
       return res
-        .status(500)
+        .status(INTERNAL_SERVER_ERROR)
         .send({ message: 'Что-то пошло не так на сервере' });
     });
 };

@@ -1,11 +1,17 @@
 const User = require('../models/user');
+const {
+  CREATED,
+  BAD_REQUEST,
+  NOT_FOUND,
+  INTERNAL_SERVER_ERROR,
+} = require('../utils/constanst');
 
 const checkUserId = (user, res) => {
   if (user) {
     return res.send(user);
   }
   return res
-    .status(404)
+    .status(NOT_FOUND)
     .send({ message: 'Такого id не существует' });
 };
 
@@ -14,7 +20,7 @@ const getUsers = (req, res) => {
     .then((users) => res.send({ data: users }))
     .catch(() => {
       res
-        .status(500)
+        .status(INTERNAL_SERVER_ERROR)
         .send({ message: 'Что-то пошло не так на сервере' });
     });
 };
@@ -25,17 +31,17 @@ const createUser = (req, res) => {
   User.create({ name, about, avatar })
     .then((newUser) => {
       res
-        .status(201)
+        .status(CREATED)
         .send(newUser);
     })
     .catch((error) => {
       if (error.name === 'ValidationError') {
-        return res.status(400).send({
+        return res.status(BAD_REQUEST).send({
           message: 'Данные переданы некорретно.',
         });
       }
       return res
-        .status(500)
+        .status(INTERNAL_SERVER_ERROR)
         .send({ message: 'Что-то пошло не так на сервере' });
     });
 };
@@ -47,10 +53,10 @@ const getUserById = (req, res) => {
     .then((user) => checkUserId(user, res))
     .catch((error) => {
       if (error.name === 'CastError') {
-        return res.status(400).send({ message: 'Такого id не существует' });
+        return res.status(BAD_REQUEST).send({ message: 'Такого id не существует' });
       }
       return res
-        .status(500)
+        .status(INTERNAL_SERVER_ERROR)
         .send({ message: 'Что-то пошло не так на сервере' });
     });
 };
@@ -67,12 +73,12 @@ const editProfile = (req, res) => {
     .then((user) => checkUserId(user, res))
     .catch((error) => {
       if (error.name === 'ValidationError') {
-        return res.status(400).send({
+        return res.status(BAD_REQUEST).send({
           message: 'Данные переданы некорретно.',
         });
       }
       return res
-        .status(500)
+        .status(INTERNAL_SERVER_ERROR)
         .send({ message: 'Что-то пошло не так на сервере' });
     });
 };
@@ -85,12 +91,12 @@ const updateAvatar = (req, res) => {
     .then((user) => checkUserId(user, res))
     .catch((error) => {
       if (error.name === 'ValidationError') {
-        return res.status(400).send({
+        return res.status(BAD_REQUEST).send({
           message: 'Данные переданы некорретно.',
         });
       }
       return res
-        .status(500)
+        .status(INTERNAL_SERVER_ERROR)
         .send({ message: 'Что-то пошло не так на сервере' });
     });
 };
