@@ -7,10 +7,10 @@ userRouter.get(getUsers);
 
 userRouter.post(createUser);
 
-userRouter.get('/users/:id', getUserById);
+userRouter.get('/:id', getUserById);
 
-userRouter.patch('/users/me', editProfile);
+userRouter.patch('/me', editProfile);
 
-userRouter.patch('/users/me/avatar', updateAvatar);
+userRouter.patch('/me/avatar', updateAvatar);
 
 module.exports = userRouter;

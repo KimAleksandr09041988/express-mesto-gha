@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 
 const { PORT = 3000 } = process.env;
 const app = express();
-const userRouter = require('./routes/userRouter');
-const cardRouter = require('./routes/cardRouter');
+const router = require('./routes/index');
 const { NOT_FOUND } = require('./utils/constanst');
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
@@ -20,13 +19,10 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/users', userRouter);
-app.use('/cards', cardRouter);
+app.use(router);
 
 app.use((req, res) => {
-  res.status(NOT_FOUND).send({
-    message: 'Запрошен несуществующий роут',
-  });
+  res.status(NOT_FOUND).send({ message: 'Ошибка в url. Проверьте правильность введённых данных' });
 });
 
 app.listen(PORT, () => {
