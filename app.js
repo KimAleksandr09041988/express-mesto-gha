@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const { PORT = 3000 } = process.env;
 const app = express();
-const router = require('./routes/index');
+const router = require('./routes');
 const { NOT_FOUND } = require('./utils/constanst');
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
