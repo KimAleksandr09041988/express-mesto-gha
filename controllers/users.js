@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
+const jwt = require('jsonwebtoken');
 const {
   CREATED,
   BAD_REQUEST,
@@ -105,6 +106,40 @@ const updateAvatar = (req, res) => {
     });
 };
 
+<<<<<<< HEAD
+const me = (req, res) => {
+  const { userId } = req.params;
+  User.findOne({ userId })
+    .then((user) => res.send(user))
+    .catch((error) => {
+      if (error.name === 'CastError') {
+        return res.status(BAD_REQUEST).send({ message: 'Такого id не существует' });
+      }
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: 'Что-то пошло не так на сервере' });
+    });
+};
+
+=======
+>>>>>>> 3161b0abb3ce3583a8c32d9ae1d5d84740717b21
+const login = (req, res) => {
+  const { email, password } = req.body;
+
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' });
+      res.send({ token });
+    })
+    .catch((err) => {
+      res.status(401).send({ message: err.message });
+    });
+};
+
 module.exports = {
-  getUsers, createUser, getUserById, editProfile, updateAvatar,
+<<<<<<< HEAD
+  getUsers, createUser, getUserById, editProfile, updateAvatar, login, me,
+=======
+  getUsers, createUser, getUserById, editProfile, updateAvatar, login,
+>>>>>>> 3161b0abb3ce3583a8c32d9ae1d5d84740717b21
 };
