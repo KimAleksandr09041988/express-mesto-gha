@@ -18,7 +18,7 @@ const checkUser = (user, res) => {
 
 const getUsers = (req, res, next) => {
   User.find({})
-    .then((users) => res.send({ data: users }).status(200))
+    .then((users) => res.send({ data: users }))
     .catch(next);
 };
 
