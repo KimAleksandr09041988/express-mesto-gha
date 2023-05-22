@@ -4,6 +4,7 @@ const User = require('../models/user');
 const BadRequest = require('../customErrors/BadRequest');
 const NotFound = require('../customErrors/NotFound');
 const RepeatsEmailError = require('../customErrors/RepeatsEmailError');
+const Unauthorized = require('../customErrors/Unauthorized');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -16,7 +17,7 @@ const checkUserId = (user, res) => {
 
 const getUsers = (req, res, next) => {
   User.find({})
-    .then((users) => res.send({ data: users }))
+    .then((users) => res.send({ data: users }).status(200))
     .catch(next);
 };
 
@@ -104,16 +105,34 @@ const dataUser = (req, res, next) => {
     .catch(next);
 };
 
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
 
-  return User.findUserByCredentials(email, password)
+  User.findOne({ email }).select('+password')
+    // eslint-disable-next-line consistent-return
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key', { expiresIn: '7d' });
-      res.send({ token });
+      if (!user) {
+        return Promise.reject(new Unauthorized('Неправильные почта или пароль'));
+      }
+      bcrypt.compare(password, user.password)
+        // eslint-disable-next-line consistent-return
+        .then((matched) => {
+          if (!matched) {
+            return Promise.reject(new Unauthorized('Неправильные почта или пароль'));
+          }
+          const token = jwt.sign(
+            { _id: user._id },
+            NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key',
+            { expiresIn: '7d' },
+          );
+          res.send({ token });
+        })
+        .catch((err) => {
+          next(err);
+        });
     })
     .catch((err) => {
-      res.status(401).send({ message: err.message });
+      next(err);
     });
 };
 
