@@ -25,7 +25,7 @@ app.use(errors());
 app.post('/signin', validateSignin, login);
 app.post('/signup', validateSignup, createUser);
 
-// app.use(auth);
+app.use(auth);
 app.use(router);
 app.use((req, res, next) => {
   const err = new NotFound('адресс не существует');
