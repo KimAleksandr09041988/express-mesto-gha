@@ -11,5 +11,6 @@ module.exports = {
   NOT_FOUND,
   INTERNAL_SERVER_ERROR,
 };
-// Не смог найти соответствия этих ошибок и тех которые есть в http2.
-// Если есть у вас информация по соотношению их напишите пожалуйстаю
+// const ERROR__DEFAULT = 500;
+// const ERROR__REPEATS_EMAIL = 409;
+// const ERROR__NO_ACCESS = 403;

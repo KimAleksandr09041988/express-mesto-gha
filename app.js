@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const { PORT = 3000 } = process.env;
 const app = express();
 const router = require('./routes');
-const { NOT_FOUND } = require('./utils/constanst');
 
 const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
@@ -25,8 +24,17 @@ app.use(auth);
 
 app.use(router);
 
-app.use((req, res) => {
-  res.status(NOT_FOUND).send({ message: 'Ошибка в url. Проверьте правильность введённых данных' });
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message } = err;
+  res
+    .status(statusCode)
+    .send({
+      // проверяем статус и выставляем сообщение в зависимости от него
+      message: statusCode === 500
+        ? 'На сервере произошла ошибка'
+        : message,
+    });
+  next();
 });
 
 app.listen(PORT, () => {
