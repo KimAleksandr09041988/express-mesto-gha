@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const jwt = require('jsonwebtoken');
-const jwt = require('jsonwebtoken');
+
 const {
   CREATED,
   BAD_REQUEST,
@@ -107,7 +107,6 @@ const updateAvatar = (req, res) => {
     });
 };
 
-<<<<<<< HEAD
 const me = (req, res) => {
   const { userId } = req.params;
   User.findOne({ userId })
@@ -122,8 +121,6 @@ const me = (req, res) => {
     });
 };
 
-=======
->>>>>>> 3161b0abb3ce3583a8c32d9ae1d5d84740717b21
 const login = (req, res) => {
   const { email, password } = req.body;
 
@@ -138,9 +135,6 @@ const login = (req, res) => {
 };
 
 module.exports = {
-<<<<<<< HEAD
   getUsers, createUser, getUserById, editProfile, updateAvatar, login, me,
-=======
-  getUsers, createUser, getUserById, editProfile, updateAvatar, login,
->>>>>>> 3161b0abb3ce3583a8c32d9ae1d5d84740717b21
+
 };
