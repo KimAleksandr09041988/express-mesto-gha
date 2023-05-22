@@ -1,16 +1,7 @@
-const NO_ERROR = 200;
-const CREATED = 201;
-const BAD_REQUEST = 400;
-const NOT_FOUND = 404;
-const INTERNAL_SERVER_ERROR = 500;
+const regularAvatar = /^((http|https:\/\/.)[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]*\.[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]*)$/;
+const regularLink = /^(ftp|http|https):\/\/[^ "]+$/;
 
 module.exports = {
-  NO_ERROR,
-  CREATED,
-  BAD_REQUEST,
-  NOT_FOUND,
-  INTERNAL_SERVER_ERROR,
+  regularAvatar,
+  regularLink,
 };
-// const ERROR__DEFAULT = 500;
-// const ERROR__REPEATS_EMAIL = 409;
-// const ERROR__NO_ACCESS = 403;
