@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const BadRequest = require('../customErrors/BadRequest');
@@ -8,7 +9,7 @@ const Unauthorized = require('../customErrors/Unauthorized');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-const checkUserId = (user, res) => {
+const checkUser = (user, res) => {
   if (user) {
     return res.send(user).status(200);
   }
@@ -51,7 +52,7 @@ const getUserById = (req, res, next) => {
   const { userId } = req.params;
 
   User.findById(userId)
-    .then((user) => checkUserId(user, res))
+    .then((user) => checkUser(user, res))
     .catch((err) => {
       if (err.name === 'CastError') {
         const error = new BadRequest('Некорректный id');
@@ -71,7 +72,7 @@ const editProfile = (req, res, next) => {
     { name, about },
     { new: true, runValidators: true },
   )
-    .then((user) => checkUserId(user, res))
+    .then((user) => checkUser(user, res))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         const erros = new BadRequest('Некорректный данные');
@@ -87,7 +88,7 @@ const updateAvatar = (req, res, next) => {
   const avatar = req.body;
 
   User.findByIdAndUpdate(owner, avatar, { new: true, runValidators: true })
-    .then((user) => checkUserId(user, res))
+    .then((user) => checkUser(user, res))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         const erros = new BadRequest('Некорректный данные');
@@ -101,7 +102,7 @@ const updateAvatar = (req, res, next) => {
 const dataUser = (req, res, next) => {
   const { userId } = req.user._id;
   User.findById({ userId })
-    .then((user) => checkUserId(user, res))
+    .then((user) => checkUser(user, res))
     .catch(next);
 };
 

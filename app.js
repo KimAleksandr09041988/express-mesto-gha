@@ -1,5 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const { errors } = require('celebrate');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -7,6 +9,8 @@ const router = require('./routes');
 
 const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
+const { validateSignup, validateSignin, handleErrors } = require('./middlewares/errors');
+const NotFound = require('./customErrors/NotFound');
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
@@ -17,25 +21,17 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.post('/signin', login);
-app.post('/signup', createUser);
+app.use(errors());
+app.post('/signin', validateSignin, login);
+app.post('/signup', validateSignup, createUser);
 
 app.use(auth);
-
-app.use(router);
-
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-  res
-    .status(statusCode)
-    .send({
-      // проверяем статус и выставляем сообщение в зависимости от него
-      message: statusCode === 500
-        ? 'На сервере произошла ошибка'
-        : message,
-    });
-  next();
+app.use((req, res, next) => {
+  const err = new NotFound('адресс не существует');
+  next(err);
 });
+app.use(router);
+app.use(handleErrors);
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
