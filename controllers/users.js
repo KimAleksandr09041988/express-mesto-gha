@@ -41,10 +41,9 @@ const createUser = (req, res, next) => {
         const error = new RepeatsEmailError('Пользователь с таким email зарегистрирован');
         next(error);
       } else {
-        const error = new BadRequest('не корректные данные');
-        next(error);
+        next(err);
       }
-      next(err);
+      // next(err);
     });
 };
 
