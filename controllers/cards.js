@@ -19,9 +19,6 @@ const createCard = (req, res, next) => {
 
   Card.create({ name, link, owner: _id })
     .then((newCard) => {
-      res.send(newCard);
-    })
-    .then((newCard) => {
       res.status(201).send(newCard);
     })
     .catch((err) => {
