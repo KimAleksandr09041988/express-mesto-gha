@@ -4,7 +4,7 @@ const NotFound = require('../customErrors/NotFound');
 const Forbidden = require('../customErrors/Forbidden');
 
 const getCards = (req, res, next) => {
-  Card.find().populate(['owner', 'likes'])
+  Card.find()
     .then((card) => {
       res.send(card);
     })
@@ -28,9 +28,8 @@ const createCard = (req, res, next) => {
       if (err.name === 'ValidationError') {
         const error = new BadRequest('Не корректные данные');
         next(error);
-      } else {
-        next(err);
       }
+      next(err);
     });
 };
 

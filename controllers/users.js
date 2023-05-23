@@ -40,10 +40,12 @@ const createUser = (req, res, next) => {
       if (err.code === 11000) {
         const error = new RepeatsEmailError('Пользователь с таким email зарегистрирован');
         next(error);
-      } else {
-        next(err);
       }
-      // next(err);
+      if (err.code === 'ValidationError') {
+        const error = new BadRequest('не корректные данные');
+        next(error);
+      }
+      next(err);
     });
 };
 
@@ -56,9 +58,8 @@ const getUserById = (req, res, next) => {
       if (err.name === 'CastError') {
         const error = new BadRequest('Некорректный id');
         next(error);
-      } else {
-        next(err);
       }
+      next(err);
     });
 };
 
@@ -76,9 +77,8 @@ const editProfile = (req, res, next) => {
       if (err.name === 'ValidationError') {
         const erros = new BadRequest('Некорректный данные');
         next(erros);
-      } else {
-        next(err);
       }
+      next(err);
     });
 };
 
@@ -92,9 +92,8 @@ const updateAvatar = (req, res, next) => {
       if (err.name === 'ValidationError') {
         const erros = new BadRequest('Некорректный данные');
         next(erros);
-      } else {
-        next(err);
       }
+      next(err);
     });
 };
 
