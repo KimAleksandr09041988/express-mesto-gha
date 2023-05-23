@@ -21,7 +21,6 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(errors());
 app.post('/signin', validateSignin, login);
 app.post('/signup', validateSignup, createUser);
 
@@ -31,6 +30,8 @@ app.use((req, res, next) => {
   const err = new NotFound('адресс не существует');
   next(err);
 });
+
+app.use(errors());
 app.use(handleErrors);
 
 app.listen(PORT, () => {
