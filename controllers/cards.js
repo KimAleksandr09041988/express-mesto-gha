@@ -25,8 +25,9 @@ const createCard = (req, res, next) => {
       if (err.name === 'ValidationError') {
         const error = new BadRequest('Не корректные данные');
         next(error);
+      } else {
+        next(err);
       }
-      next(err);
     });
 };
 
@@ -68,7 +69,7 @@ const putDislike = (req, res, next) => {
   const id = req.user._id;
   Card.findByIdAndUpdate(
     cardId,
-    { $pull: { likes: id } }, // убрать _id из массива
+    { $pull: { likes: id } },
     { new: true },
   ).populate(['owner'])
     .then((card) => {
@@ -93,7 +94,7 @@ const putLike = (req, res, next) => {
   const id = req.user._id;
   Card.findByIdAndUpdate(
     cardId,
-    { $addToSet: { likes: id } }, // добавить _id в массив, если его там нет
+    { $addToSet: { likes: id } },
     { new: true },
   ).populate(['owner'])
     .then((card) => {
